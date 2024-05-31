@@ -14,7 +14,8 @@ import yake
 import os
 import sys
 
-os.environ['TRANSFORMERS_CACHE'] = r'D:\Downloads\Huggingface_cache'
+# Setting path for Huggingface Models to get downloaded
+os.environ['TRANSFORMERS_CACHE'] = 'path\to\Huggingface_cache'
 
 # Loads pre-trained models for sentence embedding and zero-shot classification.
 @st.cache_resource
@@ -30,7 +31,7 @@ def load_models():
 @st.cache_resource
 def load_data(_sentence_model):
     #Processing Data
-    csv_data = pd.read_csv(r"C:\Mercor_Search\resumes_details.csv")
+    csv_data = pd.read_csv("path/to/resume.csv file") # you can raise a request to get the file from here https://drive.google.com/file/d/1I8x7rL7T4W1A5TPJLwqUK9LWaadtI7vq/view?usp=drive_link
     resumes = csv_data['resume_details']
     resumes = [eval(resume) for resume in resumes]
     
@@ -141,6 +142,7 @@ if st.button("Search"):
             query_embedding = st.session_state.sentence_model.encode(expanded_query)
             keywords = extract_keywords(expanded_query)
             keyword_embeddings = [st.session_state.sentence_model.encode(word) for word in keywords]
+            #combining query & keyword embeddings
             combined_query_embedding = np.mean([query_embedding] + keyword_embeddings, axis=0)
 
             # Perform semantic search
